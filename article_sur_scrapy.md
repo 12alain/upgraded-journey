@@ -59,14 +59,90 @@ command in Scrapy's command-line interface .For exemple :
 In our case, here is the structure of our Jumia project.
 
 ![](img/Caput2.png)
-* #####    __ _init___.py :
+* #####   spiders  
 
+ The [spiders][8] stored in a folder named "spiders" are Python classes that define how to extract data from a website.
+ 
+```python
+from import scrapy , spider
+class Myspider(scrapy):
+    name="myspider"
+    start_urls=["http://www.example.com"]
+    # Extract data from the response
+    def parse(self,reponse):
+        title=reponse.css("title::text").get()
+    # Yield an item containing the extracted data
+        yield {"title": title}
+```
+In this example, MySpider is a spider that extracts the title of a webpage and stores the result in an item object.
+* 
+* ##### __init__.py
+file can be empty, or it can contain Python code that needs to be executed when the package is imported. It can contain class definitions, functions, variables, constants, module imports, and so on.
+* #####  items.py
+[Items][9] are containers that store the data extracted by the spiders.
+```python
+import scrapy
+class MyItem(scrapy.Item):
+     title = scrapy.Field()
+     description = scrapy.Field()
+```
+In this example, MyItem is an item object that contains title and description fields to store data extracted by a spider.
+* #####  Middleware.py
+[Middleware][10] are Python classes that provide additional functionality to Scrapy, such as filtering requests or processing responses.
+```python
+class CustomMiddleware:
+    def process_request(self, request, spider):
+        # Modify the request before it is sent
+        request.headers["User-Agent"] = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36"
 
+    def process_response(self, request, response, spider):
+        # Modify the response before it is returned to the spider
+        if response.status == 404:
+            return scrapy.Request("http://www.example.com", callback=spider.parse_error)
+        else:
+            return response
+```
+In this example, CustomMiddleware is a class that modifies requests and responses by adding a custom User-Agent header to requests and checking the response status code. If the status code is 404, the middleware sends a new request to another page.
+* ##### Pipelines.py
+ [Pipelines][11] are Python classes that handle the data extracted by the spiders.
+ ```python
+import json
+class MyPipeline:
+    def __init__(self):
+        self.file = open("data.json", "w")
 
-  [1]: http://fr.softoware.org/apps/download-scrapy-for-web.html
-  [2]: https://github.com/scrapy/scrapy
-  [3]: https://en.wikipedia.org/wiki/Web_crawler
-  [4]: https://en.wikipedia.org/wiki/Web_scraping
-  [5]: https://docs.scrapy.org/en/latest/intro/install.html
-  [6]: https://docs.continuum.io/anaconda/
-  [7]: https://docs.scrapy.org/en/latest/topics/commands.html
+    def process_item(self, item, spider):
+        # Write the item to a JSON file
+        line = json.dumps(dict(item)) + "\n"
+        self.file.write(line)
+        return item
+
+    def close_spider(self, spider):
+        # Close the file when the spider is done
+        self.file.close()
+```
+In this example, MyPipeline is a class that stores the data extracted by a spider in a JSON file. The process_item method is called for each extracted item, which is then written to the file. The close_spider method is called when the spider has finished its work, and it closes the file.
+* ##### Settings.py
+[Settings][12] are configuration variables that define the behavior of Scrapy.
+```python
+BOT_NAME = "mybot"
+USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36"
+ROBOTSTXT_OBEY = True
+ITEM_PIPELINES = {"myproject.pipelines.MyPipeline": 300}
+```
+In this example, Scrapy settings are defined in a settings.py file. The bot name, User-Agent header used for requests, whether to obey the robots.txt file, and the pipeline used are all specified in this file.
+* ##### Scrapy.cfg
+This is the main configuration file for Scrapy. It contains information such as the project name, default settings, and spider locations.
+# 3. Extraction de donner
+  [1]: https://docs.scrapy.org/en/latest/topics/item-pipeline.html
+  [2]: https://docs.scrapy.org/en/latest/topics/item-pipeline.html
+  [3]: https://docs.scrapy.org/en/latest/topics/item-pipeline.html
+  [4]: https://docs.scrapy.org/en/latest/topics/item-pipeline.html
+  [5]: https://docs.scrapy.org/en/latest/topics/item-pipeline.html
+  [6]: https://docs.scrapy.org/en/latest/topics/item-pipeline.html
+  [7]: https://docs.scrapy.org/en/latest/topics/item-pipeline.html
+  [8]: https://docs.scrapy.org/en/latest/topics/item-pipeline.html
+  [9]: https://docs.scrapy.org/en/latest/topics/item-pipeline.html
+  [10]: https://docs.scrapy.org/en/latest/topics/item-pipeline.html
+  [11]: https://docs.scrapy.org/en/latest/topics/item-pipeline.html
+  [12]: https://docs.scrapy.org/en/latest/topics/settings.html
