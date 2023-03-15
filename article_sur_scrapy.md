@@ -133,7 +133,67 @@ ITEM_PIPELINES = {"myproject.pipelines.MyPipeline": 300}
 In this example, Scrapy settings are defined in a settings.py file. The bot name, User-Agent header used for requests, whether to obey the robots.txt file, and the pipeline used are all specified in this file.
 * ##### Scrapy.cfg
 This is the main configuration file for Scrapy. It contains information such as the project name, default settings, and spider locations.
-# 3. Extraction de donner
+# 3. Data extraction
+In our case, we will extract data on the articles from the Jumia website (https://www.jumia.com.tn)
+##### * Writing in Item.py
+  ```python
+import scrapy
+class ArticleItem(scrapy.Item):
+      # Definition of fields for the ArticleItem object
+      # Field for article designations
+      designations=scrapy.Field()
+      # Field for article images
+      picture=scrapy.Field()
+      # Field for article prices
+      price=scrapy.Field()
+
+```
+In this code, we retrieve the designation, image, and price of an article.
+* ##### Creating a spider file in the spider folder
+We will create a new file "article.py" in the spider folder. In this file, we will write our spider which is nothing but a class inheriting from the Scrapy spider class.
+```python
+# Import necessary modules
+from scrapy import Request, Spider
+from ..items import ArticleItem
+from jumia import items
+
+# Create a spider class
+class SpiderArticle(Spider):
+    # Define spider name
+    name = "article"
+    # Define the URL to scrape
+    url = "https://www.jumia.com.tn/"
+
+    # Define the starting point for the spider
+    def start_requests(self):
+        # Send a request to the URL and specify the callback function to use
+        yield Request(url=self.url, callback=self.parse_article)
+
+    # Define the callback function to extract data from the page
+    def parse_article(self, response):
+        # Find all the articles on the page
+        listeArticle = response.css('article.prd')
+        # Loop through each article and extract relevant data
+        for article in listeArticle:
+            # Extract the article's designation
+            designations = article.css('a.core div.name::text').extract_first()
+            # Extract the article's picture
+            picture = article.css('a.core img.img').attrib['data-src']
+            # Extract the article's price
+            price = article.css('a.core div.prc::text').extract_first()
+            # Create an ArticleItem instance and fill it with data
+            item = ArticleItem()
+            item['designations'] = designations
+            item['picture'] = picture
+            item['price'] = price
+
+            # Yield the ArticleItem instance to Scrapy for further processing
+            yield item
+```
+
+
+
+
   [1]: https://docs.scrapy.org/en/latest/topics/item-pipeline.html
   [2]: https://docs.scrapy.org/en/latest/topics/item-pipeline.html
   [3]: https://docs.scrapy.org/en/latest/topics/item-pipeline.html
