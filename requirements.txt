@@ -4,3 +4,5 @@ pandas
 seaborn
 jupyter
 notebook
+pillow
+Python-Slugify
