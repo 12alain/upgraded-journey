@@ -190,12 +190,217 @@ class SpiderArticle(Spider):
             # Yield the ArticleItem instance to Scrapy for further processing
             yield item
 ```
+* #####  data recovery
+
+```python
+# This command runs the Scrapy spider called "article" to scrape data from the specified website.
+scrapy crawl article
+```
+  the result of executing this code.
+ ![Figure 3](img/donne.png)
+* ##### Storing data in an Excel file named article.csv 
+```python
+scrapy crawl article -o article.csv
+```
+the result of executing this code.
+![Figure 4 ](img/Captu3.png)
+* ##### Displaying data with pandas.
+```python
+import pandas as pd 
+df=pd.read_csv("article.csv")
+df.head()
+```
+| Designations                                      | Picture                                           | Price      |
+|---------------------------------------------------|---------------------------------------------------|------------|
+| Evertek M20 Nano - 4" - 1G - 8G - Noir - Garan..  | https://tn.jumia.is/unsafe/fit-in/300x300/filt..  | 119.00 TN  |
+| Kiwi Extracteur de jus - 200 W - KJ-1950 - Bla... | https://tn.jumia.is/unsafe/fit-in/300x300/filt.   | 159.00 TND |
+| Evertek M20S PRO - 2Go - 16Go - Rouge - Garant.   | https://tn.jumia.is/unsafe/fit-in/300x300/filt... | 279.00 TND |
+| Clavier gamer RGB - USB                           | https://tn.jumia.is/unsafe/fit-in/300x300/filt.   | 27.90 TND  |
+
+#  4. Using pipelines 
+* ##### Extracting images using pipelines.
+```python
+from itemadapter import ItemAdapter
+from scrapy.pipelines.images import ImagesPipeline
+from slugify import slugify
+from scrapy import Request
+import os
+
+class CustomImagesPipeline(ImagesPipeline):
+    # Pipeline for downloading images from article pages
+
+    def get_media_requests(self, item, info):
+       
+        image_url = item['picture_url'] # use 'picture_url' instead of 'picture'
+        yield Request(image_url)
+
+    def file_path(self, request, response=None, info=None, *, item=None):
+        # This method is called to determine the file name and path for the downloaded image
+        # We use the 'designations' field from the ArticleItem object as the basis for the file name
+        # We use the 'slugify' library to remove any characters that are not allowed in a file name
+        # We limit the maximum length of the file name to 200 characters, to avoid issues with long names
+        image_name = slugify(item.get('designations'), max_length=200)
+        return f'full/{image_name}.jpg' # save the image to the 'full' subdirectory, with a .jpg extension
+```
+ This code allows us to retrieve and download images of our articles
+* ##### Configuring our settings file to be able to run our pipelines 
+```python
+BOT_NAME = "jumia"
+
+SPIDER_MODULES = ["jumia.spiders"]
+NEWSPIDER_MODULE = "jumia.spiders"
+ITEM_PIPELINES = {'jumia.pipelines.CustomImagesPipeline': 1 }
+
+IMAGES_STORE = 'images'
+# Obey robots.txt rules
+ROBOTSTXT_OBEY = True
+
+```
+
+Updating the article.py file for image extraction.
+```python
+from scrapy import Request, Spider
+from jumia.items import ArticleItem # import ArticleItem from the correct location
+from scrapy import Request
+
+class SpiderArticle(Spider):
+    name = "article"
+    url = "https://www.jumia.com.tn/"
+
+    def start_requests(self):
+        yield Request(url=self.url, callback=self.parse_article)
+
+    def parse_article(self, response):
+        # Get the list of articles
+        listeArticle = response.css('article.prd')
+        for article in listeArticle:
+            # Get the article's designations, picture URL, and price
+            designations = article.css('a.core div.name::text').extract_first()
+            picture_url = article.css('a.core img.img').attrib['data-src']
+            price = article.css('a.core div.prc::text').extract_first()
+            
+            # Create a new ArticleItem object and assign the scraped data to its fields
+            item = ArticleItem()
+            item['designations'] = designations
+            item['picture'] = picture_url
+            item['price'] = price
+            item['picture_url'] = picture_url
+            
+            # Yield the item to pass it to the pipeline for further processing
+            yield item
+
+```
+Updating the items.py file for image extraction.
+```python
+import scrapy
 
 
+class ArticleItem(scrapy.Item):
+    
+      # Field for article designations
+      designations=scrapy.Field()
+      # Field for article images
+      picture=scrapy.Field()
+      # Field for article prices
+      price=scrapy.Field()
+      # Field for the URL of the article's picture
+      picture_url = scrapy.Field()
+```
+Run our spider again:
+```python
+scrapy crawl article
+```
+Result of the execution.
+![](img/resulta.png)
+# 5. Using pipelines for data transformation
+
+```python
+class CustomPricePipeline:
+    # Pipeline to convert prices to euros
+    exchange_rate = 0.31 # TND to EUR exchange rate
+    def process_item(self, item, spider):
+        # We assume the price is in TND and convert it to EUR
+        tnd_price = item['price']
+        if 'TND' in tnd_price: # Check if price is in TND
+            tnd_price = tnd_price.replace('TND', '').strip() # Remove 'TND' currency symbol and any whitespace
+            eur_price = round(float(tnd_price) * self.exchange_rate)
+            item['price'] = f'{eur_price} EUR'
+        return item
+```
+ This code converts prices to euros.
+* ##### Updating the settings.py file to run this code.
+```python
+BOT_NAME = "jumia"
+
+SPIDER_MODULES = ["jumia.spiders"]
+NEWSPIDER_MODULE = "jumia.spiders"
+ITEM_PIPELINES = {'jumia.pipelines.CustomImagesPipeline': 1 ,
+                  'jumia.pipelines.CustomPricePipeline': 2 ,
+                  
+}
+
+IMAGES_STORE = 'images'
+ROBOTSTXT_OBEY = True
+```
+Here is the obtained result.
 
 
-  [1]: https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-  [2]: https://docs.scrapy.org/en/latest/topics/item-pipeline.html
+|                                                  |         |
+|--------------------------------------------------|---------|
+| Designations                                     | Price   |
+| Evertek M20 Nano - 4" - 1G - 8G - Noir - Garan.. | 119 EUR |
+| Kiwi Extracteur de jus - 200 W - KJ-1950 - Bla.  | 159 EUR |
+| Evertek M20S PRO - 2Go - 16Go - Rouge - Garant.  | 279 EUR |
+
+# 6. Uses of pipelines to process data.
+
+```python
+class CustomDesignationsPipeline:
+    
+    def process_item(self, item, spider):
+        # Initialize an empty list to store the extracted words
+        words = []
+        
+        # Loop through each designation in the 'designations' field of the item
+        for designation in item['designations']:
+            # Split the designation string at the '-' character and get the first element (i.e., the word)
+            word = designation.split('-')[0].strip()
+            # If the resulting word is not an empty string, append it to the 'words' list
+            if word:
+                words.append(word)
+        
+        # Join the words in the 'words' list into a single string, separated by spaces
+        extracted_words = ' '.join(words)
+        
+        # Add the extracted words to the item dictionary
+        item['extracted_words'] = extracted_words
+        
+        # Return the modified item
+        return item
+```
+This code defines a custom pipeline class that extracts certain words from the designations field of each item processed by a spider. The extracted words are stored in a new field called extracted_words in the item dictionary.
+* ##### Updating the settings.py file to run this code.
+```python
+BOT_NAME = "jumia"
+
+SPIDER_MODULES = ["jumia.spiders"]
+NEWSPIDER_MODULE = "jumia.spiders"
+ITEM_PIPELINES = {'jumia.pipelines.CustomImagesPipeline': 1 ,
+                  'jumia.pipelines.CustomPricePipeline': 2 ,
+                   'jumia.pipelines.CustomDesignationsPipeline':3
+}
+
+IMAGES_STORE = 'images'
+ROBOTSTXT_OBEY = True
+```
+Here is the result obtained.| Designations                                      | extracted_words                
+
+| Designations                                      | Extracted_words                                   |
+|---------------------------------------------------|---------------------------------------------------|
+| Samsung Téléviseur Smart 32" - FullHD - UA32T5    | S a m s u n g T é l é v i s e u r S m a r t 3  |
+| Brazilian Glow Sérum Caviar Thermo-Lissant        | B r a z i l i a n G l o w S é r u m C a v i a   |
+| Niken MINI COMPRESSEUR D AIR DE LA MARQUE NIKE... | N i k e n M I N I C O M P R E S S E U R D A I  |
+
   [3]: https://docs.scrapy.org/en/latest/topics/item-pipeline.html
   [4]: https://docs.scrapy.org/en/latest/topics/item-pipeline.html
   [5]: https://docs.scrapy.org/en/latest/topics/item-pipeline.html
