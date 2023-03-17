@@ -393,7 +393,7 @@ ITEM_PIPELINES = {'jumia.pipelines.CustomImagesPipeline': 1 ,
 IMAGES_STORE = 'images'
 ROBOTSTXT_OBEY = True
 ```
-Here is the result obtained.| Designations                                      | extracted_words                
+Here is the result obtained.          
 
 | Designations                                      | Extracted_words                                   |
 |---------------------------------------------------|---------------------------------------------------|
@@ -401,6 +401,27 @@ Here is the result obtained.| Designations                                      
 | Brazilian Glow Sérum Caviar Thermo-Lissant        | B r a z i l i a n G l o w S é r u m C a v i a   |
 | Niken MINI COMPRESSEUR D AIR DE LA MARQUE NIKE... | N i k e n M I N I C O M P R E S S E U R D A I  |
 
+# conclusion
+Hoping that you have learned two or three things, know that the topic is much broader than it seems. It is therefore strongly recommended that you browse the following links to perfect your learning.
+# To Learn more 
+* Scrapy documentation: https://docs.scrapy.org/en/latest/
+* Scrapy tutorial: https://docs.scrapy.org/en/latest/intro/tutorial.html
+* Advanced Scrapy techniques: https://blog.scrapinghub.com/2016/07/07/scrapy-tips-from-the-pros-advanced-techniques/
+* Scrapy vs. BeautifulSoup comparison: https://www.scrapingbee.com/blog/scrapy-vs-beautiful-soup/
+* Scrapy and Splash tutorial: https://blog.scrapinghub.com/2015/03/02/handling-javascript-in-scrapy-with-splash/
+* Scrapy and XPath tutoria: https://www.accordbox.com/blog/scrapy-tutorial-7-how-use-xpath-scrapy/
+* Scrapy vs. Selenium comparison: https://medium.com/analytics-vidhya/scrapy-vs-selenium-vs-beautiful-soup-for-web-scraping-24008b6c87b8
+* Scrapy architecture explained: https://docs.scrapy.org/en/latest/topics/architecture.html
+# To go even further :
+Scrapy is a powerful web scraping library, but it may not be suitable for handling extremely large datasets. When it comes to processing massive datasets, there are several alternatives to consider:
+* [PySpider][13] : 
+A powerful, open-source web crawling and web scraping framework that uses asyncio and Python's async/await syntax.
+* [Apache Nutch][14]: An open-source web crawler that allows you to search and analyze web content.
+* [StormCrawler][15]: An open-source collection of resources and tools for building scalable, distributed web crawlers.
+* [Portia][16]: A web scraping tool that uses machine learning to help you extract data from websites without writing any code.
+
+  [1]: https://docs.pyspider.org/en/latest/
+  [2]: https://docs.pyspider.org/en/latest/
   [3]: https://docs.scrapy.org/en/latest/topics/item-pipeline.html
   [4]: https://docs.scrapy.org/en/latest/topics/item-pipeline.html
   [5]: https://docs.scrapy.org/en/latest/topics/item-pipeline.html
@@ -411,3 +432,7 @@ Here is the result obtained.| Designations                                      
   [10]: https://docs.scrapy.org/en/latest/topics/item-pipeline.html
   [11]: https://docs.scrapy.org/en/latest/topics/item-pipeline.html
   [12]: https://docs.scrapy.org/en/latest/topics/settings.html
+  [13]: https://docs.pyspider.org/en/latest/
+  [14]: https://cwiki.apache.org/confluence/display/nutch/NutchTutorial
+  [15]: https://medium.com/analytics-vidhya/web-scraping-and-indexing-with-stormcrawler-and-elasticsearch-a105cb9c02ca
+  [16]: https://www.zyte.com/blog/announcing-portia/
