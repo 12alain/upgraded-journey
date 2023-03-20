@@ -2,7 +2,7 @@
 title: |
   ![](./img/Logo.png){width=2in}
   
-date: March, 2023
+date:  17 March, 2023
 lang: en-EN
 urlcolor: blue
 geometry: "left=2.5cm,right=2.5cm,top=3cm,bottom=3cm"
@@ -19,13 +19,49 @@ header-includes: |
     \rhead{Dakar Institute of Technology}
     \lhead{Alain Kiemde }
     \rfoot{Page \thepage}
----
+    
+---    
+    
+- [Introdcution](#Introdcution)
+- [Why use scrapy?](#why-use-scrapy-)--------------------------------------1
+- [Installing Scrapy](#installing-scrapy)-----------------------------------2
+- [Checking the installation](#checking-the-installation)---------------------3
+- [1. Using Scrapy](#1--using-scrapy)----------------------------------------4
+  * [Command-line interface overview](#command-line-interface-overview)-------4
+  * [Creating a new project](#creating-a-new-project)-------------------------4
+- [2. Structure of a Scrapy project](#2-structure-of-a-scrapy-project)----------5
+  * [spiders](#spiders)-------------------------------------------------------5
+  * [__init__.py](#--init--py)------------------------------------------------5
+  * [items.py](#itemspy)------------------------------------------------------5
+  * [Middleware.py](#middlewarepy)--------------------------------------------5
+  * [Pipelines.py](#pipelinespy)----------------------------------------------5
+  * [Settings.py](#settingspy)-------------------------------------------------5
+  * [Scrapy.cfg](#scrapycfg)---------------------------------------------------5
+- [3. Data extraction](#3-data-extraction)------------------------------------6
+  * [Writing in Item.py](#writing-in-itempy)----------------------------------6
+  * [Creating a spider file in the spider folder](#creating-a-spider-file-in-the-spider-folder)---6
+  * [data recovery](#data-recovery)--------------------------------------------6
+  * [Storing data in an Excel file named article.csv](#storing-data-in-an-excel-file-named-articlecsv)---6
+  * [Displaying data with pandas.](#displaying-data-with-pandas)----------------6
+- [4. Using pipelines](#4-using-pipelines)------------------------------------7
+  * [Extracting images using pipelines.](#extracting-images-using-pipelines)---7
+  * [Configuring our settings file to be able to run our pipelines](#configuring-our-settings-file-to-be-able-to-run-our-pipelines)---7
+- [5. Using pipelines for data transformation](#5using-pipelines-for-data-transformation)---8
+  * [Updating the settings.py file to run this code.](#updating-the-settingspy-file-to-run-this-code)---8
+- [6. Uses of pipelines to process data.](#6-uses-of-pipelines-to-process-data)---9
+  * [Updating the settings.py file to run this code.](#updating-the-settingspy-file-to-run-this-code-1)
+- [conclusion](#conclusion)----------------------------------------------------10
+- [To Learn more](#to-learn-more)---------------------------------------------11
+- [To go even further :](#to-go-even-further--)--------------------------------12
+
+
+
 
 \newpage
 
 ![scrapy logo ](img/scrapy.png)
 
-# Scrapy
+# Introduction
 
 [Scrapy][2] is an [open source][3] Python framework used for extracting data from websites. It is very useful for collecting data at a large scale, automating scraping tasks, and performing data analysis.
 
@@ -466,40 +502,26 @@ Here is the result obtained.
 | Brazilian Glow Sérum Caviar Thermo-Lissant        | B r a z i l i a n G l o w S é r u m C a v i a   |
 | Niken MINI COMPRESSEUR D AIR DE LA MARQUE NIKE... | N i k e n M I N I C O M P R E S S E U R D A I  |
 
-# conclusion
+# Conclusion
 
 Hoping that you have learned two or three things, know that the topic is much broader than it seems. It is therefore strongly recommended that you browse the following links to perfect your learning.
 
-# To Learn more
+# Resource
 
-* [Scrapy documentation][14]
-
-* [Scrapy tutorial][15]
-
-* [Advanced Scrapy techniques][16]
-
-* [Scrapy vs. BeautifulSoup comparison][17]
-
-* [Scrapy and Splash tutorial][18]
-
-* [Scrapy and XPath tutoria][19]
-
-* [ Scrapy vs. Selenium comparison][20] 
-
-* [Scrapy architecture explained][21]
-
-
-# To go even further :
-
-Scrapy is a powerful web scraping library, but it may not be suitable for handling extremely large datasets. When it comes to processing massive datasets, there are several alternatives to consider:
-
-* [PySpider][22] :A powerful, open-source web crawling and web scraping framework that uses asyncio and Python's async/await syntax.
-
-* [Apache Nutch][23]: An open-source web crawler that allows you to search and analyze web content.
-
-* [StormCrawler][24]: An open-source collection of resources and tools for building scalable, distributed web crawlers.
-
-* [Portia][25]: A web scraping tool that uses machine learning to help you extract data from websites without writing any code.
+- [Official Documentation](https://docs.scrapy.org/en/latest/)
+- [PySpider](https://docs.pyspider.org/en/latest/)
+- [Item Pipeline](https://docs.scrapy.org/en/latest/topics/item-pipeline.html)
+- [Settings](https://docs.scrapy.org/en/latest/topics/settings.html)
+- [Tutorial](https://docs.scrapy.org/en/latest/intro/tutorial.html)
+- [Scrapy Tips from the Pros: Advanced Techniques](https://blog.scrapinghub.com/2016/07/07/scrapy-tips-from-the-pros-advanced-techniques/)
+- [Scrapy vs Beautiful Soup](https://www.scrapingbee.com/blog/scrapy-vs-beautiful-soup/)
+- [Handling JavaScript in Scrapy with Splash](https://blog.scrapinghub.com/2015/03/02/handling-javascript-in-scrapy-with-splash/)
+- [How to Use XPath in Scrapy](https://www.accordbox.com/blog/scrapy-tutorial-7-how-use-xpath-scrapy/)
+- [Scrapy vs Selenium vs Beautiful Soup for Web Scraping](https://medium.com/analytics-vidhya/scrapy-vs-selenium-vs-beautiful-soup-for-web-scraping-24008b6c87b8)
+- [Architecture](https://docs.scrapy.org/en/latest/topics/architecture.html)
+- [NutchTutorial](https://cwiki.apache.org/confluence/display/nutch/NutchTutorial)
+- [Web Scraping and Indexing with Stormcrawler and Elasticsearch](https://medium.com/analytics-vidhya/web-scraping-and-indexing-with-stormcrawler-and-elasticsearch-a105cb9c02ca)
+- [Announcing Portia](https://www.zyte.com/blog/announcing-portia/)
 
   [1]: #scrapy
   [2]: https://docs.pyspider.org/en/latest/
