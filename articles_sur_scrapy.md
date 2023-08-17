@@ -22,39 +22,40 @@ header-includes: |
     
 ---    
     
-- [Introdcution](#Introdcution)
-- [Why use scrapy?](#why-use-scrapy-)--------------------------------------1
-- [Installing Scrapy](#installing-scrapy)-----------------------------------2
-- [Checking the installation](#checking-the-installation)---------------------3
-- [1. Using Scrapy](#1--using-scrapy)----------------------------------------4
-  * [Command-line interface overview](#command-line-interface-overview)-------4
-  * [Creating a new project](#creating-a-new-project)-------------------------4
-- [2. Structure of a Scrapy project](#2-structure-of-a-scrapy-project)----------5
-  * [spiders](#spiders)-------------------------------------------------------5
-  * [__init__.py](#--init--py)------------------------------------------------5
-  * [items.py](#itemspy)------------------------------------------------------5
-  * [Middleware.py](#middlewarepy)--------------------------------------------5
-  * [Pipelines.py](#pipelinespy)----------------------------------------------5
-  * [Settings.py](#settingspy)-------------------------------------------------5
-  * [Scrapy.cfg](#scrapycfg)---------------------------------------------------5
-- [3. Data extraction](#3-data-extraction)------------------------------------6
-  * [Writing in Item.py](#writing-in-itempy)----------------------------------6
-  * [Creating a spider file in the spider folder](#creating-a-spider-file-in-the-spider-folder)---6
-  * [data recovery](#data-recovery)--------------------------------------------6
-  * [Storing data in an Excel file named article.csv](#storing-data-in-an-excel-file-named-articlecsv)---6
-  * [Displaying data with pandas.](#displaying-data-with-pandas)----------------6
-- [4. Using pipelines](#4-using-pipelines)------------------------------------7
-  * [Extracting images using pipelines.](#extracting-images-using-pipelines)---7
-  * [Configuring our settings file to be able to run our pipelines](#configuring-our-settings-file-to-be-able-to-run-our-pipelines)---7
-- [5. Using pipelines for data transformation](#5using-pipelines-for-data-transformation)---8
-  * [Updating the settings.py file to run this code.](#updating-the-settingspy-file-to-run-this-code)---8
-- [6. Uses of pipelines to process data.](#6-uses-of-pipelines-to-process-data)---9
-  * [Updating the settings.py file to run this code.](#updating-the-settingspy-file-to-run-this-code-1)
-- [conclusion](#conclusion)----------------------------------------------------10
-- [To Learn more](#to-learn-more)---------------------------------------------11
-- [To go even further :](#to-go-even-further--)--------------------------------12
+<!-- TOC -->
+#   Content
+- [Introduction](#introduction)
+- [Why use scrapy?](#why-use-scrapy)
+- [Installing Scrapy](#installing-scrapy)
+- [Checking the installation](#checking-the-installation)
+- [Using Scrapy](#using-scrapy)
+    - [Command-line interface overview](#command-line-interface-overview)
+    - [Creating a new project](#creating-a-new-project)
+- [Structure of a Scrapy project](#structure-of-a-scrapy-project)
+    - [spiders](#spiders)
+    - [__init__.py](#__init__py)
+    - [items.py](#itemspy)
+    - [Middleware.py](#middlewarepy)
+    - [Pipelines.py](#pipelinespy)
+    - [Settings.py](#settingspy)
+    - [Scrapy.cfg](#scrapycfg)
+- [Data extraction](#data-extraction)
+    - [Writing in Item.py](#writing-in-itempy)
+    - [Creating a spider file in the spider folder](#creating-a-spider-file-in-the-spider-folder)
+    - [data recovery](#data-recovery)
+    - [Storing data in an Excel file named article.csv](#storing-data-in-an-excel-file-named-articlecsv)
+    - [Displaying data with pandas.](#displaying-data-with-pandas)
+- [Using pipelines](#using-pipelines)
+    - [Extracting images using pipelines.](#extracting-images-using-pipelines)
+    - [Configuring our settings file to be able to run our pipelines](#configuring-our-settings-file-to-be-able-to-run-our-pipelines)
+- [Using pipelines for data transformation](#using-pipelines-for-data-transformation)
+    - [Updating the settings.py file to run this code.](#updating-the-settingspy-file-to-run-this-code)
+- [Uses of pipelines to process data.](#uses-of-pipelines-to-process-data)
+    - [Updating the settings.py file to run this code.](#updating-the-settingspy-file-to-run-this-code)
+- [Conclusion](#conclusion)
+- [Resource](#resource)
 
-
+<!-- /TOC -->
 
 
 \newpage
@@ -523,28 +524,52 @@ Hoping that you have learned two or three things, know that the topic is much br
 - [Web Scraping and Indexing with Stormcrawler and Elasticsearch](https://medium.com/analytics-vidhya/web-scraping-and-indexing-with-stormcrawler-and-elasticsearch-a105cb9c02ca)
 - [Announcing Portia](https://www.zyte.com/blog/announcing-portia/)
 
-  [1]: #scrapy
-  [2]: https://docs.pyspider.org/en/latest/
-  [3]: https://docs.pyspider.org/en/latest/
-  [4]: https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-  [5]: https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-  [6]: https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-  [7]: https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-  [8]: https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-  [9]: https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-  [10]: https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-  [11]: https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-  [12]: https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-  [13]: https://docs.scrapy.org/en/latest/topics/settings.html
-  [14]: https://docs.scrapy.org/en/latest/
-  [15]: https://docs.scrapy.org/en/latest/intro/tutorial.html
-  [16]: https://blog.scrapinghub.com/2016/07/07/scrapy-tips-from-the-pros-advanced-techniques/
-  [17]: https://www.scrapingbee.com/blog/scrapy-vs-beautiful-soup/
-  [18]: https://blog.scrapinghub.com/2015/03/02/handling-javascript-in-scrapy-with-splash/
-  [19]: https://www.accordbox.com/blog/scrapy-tutorial-7-how-use-xpath-scrapy/
-  [20]: https://medium.com/analytics-vidhya/scrapy-vs-selenium-vs-beautiful-soup-for-web-scraping-24008b6c87b8
-  [21]: https://docs.scrapy.org/en/latest/topics/architecture.html
-  [22]: https://docs.pyspider.org/en/latest/
-  [23]: https://cwiki.apache.org/confluence/display/nutch/NutchTutorial
-  [24]: https://medium.com/analytics-vidhya/web-scraping-and-indexing-with-stormcrawler-and-elasticsearch-a105cb9c02ca
-  [25]: https://www.zyte.com/blog/announcing-portia/
+ [1]1]: #scrapy
+
+ [2]2]: https://docs.pyspider.org/en/latest/
+
+ [3]3]: https://docs.pyspider.org/en/latest/
+
+ [4]4]: https://docs.scrapy.org/en/latest/topics/item-pipeline.html
+
+ [5]5]: https://docs.scrapy.org/en/latest/topics/item-pipeline.html
+
+ [6]6]: https://docs.scrapy.org/en/latest/topics/item-pipeline.html
+
+ [7]7]: https://docs.scrapy.org/en/latest/topics/item-pipeline.html
+
+ [8]8]: https://docs.scrapy.org/en/latest/topics/item-pipeline.html
+
+ [9]9]: https://docs.scrapy.org/en/latest/topics/item-pipeline.html
+
+ [10]0]: https://docs.scrapy.org/en/latest/topics/item-pipeline.html
+
+ [11]1]: https://docs.scrapy.org/en/latest/topics/item-pipeline.html
+
+ [12]2]: https://docs.scrapy.org/en/latest/topics/item-pipeline.html
+
+ [13]3]: https://docs.scrapy.org/en/latest/topics/settings.html
+
+ [14]4]: https://docs.scrapy.org/en/latest/
+
+ [15]5]: https://docs.scrapy.org/en/latest/intro/tutorial.html
+
+ [16]6]: https://blog.scrapinghub.com/2016/07/07/scrapy-tips-from-the-pros-advanced-techniques/
+
+ [17]7]: https://www.scrapingbee.com/blog/scrapy-vs-beautiful-soup/
+
+ [18]8]: https://blog.scrapinghub.com/2015/03/02/handling-javascript-in-scrapy-with-splash/
+
+ [19]9]: https://www.accordbox.com/blog/scrapy-tutorial-7-how-use-xpath-scrapy/
+
+ [20]0]: https://medium.com/analytics-vidhya/scrapy-vs-selenium-vs-beautiful-soup-for-web-scraping-24008b6c87b8
+
+ [21]1]: https://docs.scrapy.org/en/latest/topics/architecture.html
+
+ [22]2]: https://docs.pyspider.org/en/latest/
+
+ [23]3]: https://cwiki.apache.org/confluence/display/nutch/NutchTutorial
+
+ [24]4]: https://medium.com/analytics-vidhya/web-scraping-and-indexing-with-stormcrawler-and-elasticsearch-a105cb9c02ca
+
+ [25]5]: https://www.zyte.com/blog/announcing-portia/
